@@ -1,0 +1,19 @@
+# SQLite database (contains your private memories - DO NOT PUSH)
+second_brain.db
+
+# Python compiled files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Mac system files
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/

@@ -1,0 +1,2051 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aether - Digital Second Brain Workspace</title>
+    <!-- Modern Premium Typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary: 270, 95%, 65%;      /* Vibrant Violet */
+            --primary-glow: rgba(168, 85, 247, 0.4);
+            --secondary: 190, 100%, 50%;   /* Neon Cyan */
+            --secondary-glow: rgba(6, 182, 212, 0.4);
+            --success: 150, 85%, 45%;      /* Emerald Green */
+            --success-glow: rgba(16, 185, 129, 0.25);
+            --warning: 35, 100%, 50%;      /* Amber Orange */
+            --warning-glow: rgba(245, 158, 11, 0.25);
+            --danger: 355, 90%, 55%;       /* Ruby Red */
+            --accent: 320, 100%, 60%;      /* Cyber Pink */
+            --background: 225, 30%, 6%;    /* Deep Space Black */
+            --surface: 225, 25%, 11%;      /* Semi-transparent Glass Card */
+            --border: rgba(255, 255, 255, 0.08);
+            --text-main: 220, 20%, 90%;
+            --text-muted: 220, 12%, 60%;
+            --font-outfit: 'Outfit', sans-serif;
+            --font-code: 'Fira Code', monospace;
+        }
+
+        /* Clean Professional Gradient Background */
+        body {
+            margin: 0;
+            padding: 0;
+            background: radial-gradient(circle at 50% 0%, #151b2b 0%, #090c14 100%) no-repeat fixed;
+            color: hsl(var(--text-main));
+            font-family: var(--font-outfit);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Ambient Professional Glow Mesh (Very Subtle) */
+        .aurora-blob {
+            position: fixed;
+            width: 40vw;
+            height: 40vw;
+            border-radius: 50%;
+            z-index: -3;
+            filter: blur(140px);
+            opacity: 0.05;
+            mix-blend-mode: screen;
+            pointer-events: none;
+            animation: auroraFloat 45s infinite ease-in-out;
+        }
+        .aurora-purple {
+            background: hsl(var(--primary));
+            top: -15%;
+            left: 10%;
+        }
+        .aurora-cyan {
+            background: hsl(var(--secondary));
+            bottom: -15%;
+            right: 15%;
+            animation-delay: -10s;
+        }
+        .aurora-pink {
+            background: hsl(var(--accent));
+            top: 40%;
+            left: 45%;
+            animation-delay: -20s;
+        }
+
+        @keyframes auroraFloat {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(40px, -30px) scale(1.05); }
+        }
+
+        /* Layout Structure */
+        .workspace-container {
+            max-width: 1500px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+        }
+
+        /* Double Glassmorphism Cards */
+        .glass-card {
+            background: rgba(13, 20, 38, 0.85); /* High-contrast clear dark color */
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-top: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 16px;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.4);
+            transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.3s ease;
+        }
+
+        /* Recent Trend: Clean flat hover translate + violet boundary border glow */
+        .glass-card:hover {
+            transform: translateY(-3px);
+            border-color: rgba(168, 85, 247, 0.35);
+            border-top-color: rgba(168, 85, 247, 0.55);
+            background: rgba(18, 27, 48, 0.95);
+            box-shadow: 
+                0 15px 35px rgba(0, 0, 0, 0.5),
+                0 0 25px rgba(168, 85, 247, 0.06);
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            animation: fadeInDown 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 1.25rem;
+        }
+        .logo-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--secondary)));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 25px var(--primary-glow);
+            transform: perspective(500px) rotateY(15deg);
+        }
+        .logo-icon svg {
+            width: 26px;
+            height: 26px;
+            fill: #fff;
+        }
+        h1 {
+            margin: 0;
+            font-size: 2.1rem;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            background: linear-gradient(135deg, #ffffff 30%, hsl(var(--secondary)) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .subtitle {
+            margin: 0.2rem 0 0 0;
+            color: hsl(var(--text-muted));
+            font-size: 0.95rem;
+            font-weight: 300;
+        }
+        .status-badge {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            background: rgba(255, 255, 255, 0.04);
+            padding: 0.5rem 1.1rem;
+            border-radius: 50px;
+            border: 1px solid rgba(255, 255, 255, 0.07);
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background-color: hsl(var(--success));
+            border-radius: 50%;
+            box-shadow: 0 0 10px hsl(var(--success));
+            animation: pulse 1.8s infinite;
+        }
+
+        /* Workspace Grid Split */
+        .workspace-grid {
+            display: grid;
+            grid-template-columns: 410px 1fr;
+            gap: 2rem;
+            align-items: start;
+        }
+
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            animation: fadeInLeft 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .panel-title {
+            font-size: 1.15rem;
+            font-weight: 600;
+            margin: 0 0 1rem 0;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            padding-bottom: 0.75rem;
+            color: #fff;
+        }
+        .panel-title svg {
+            width: 18px;
+            height: 18px;
+            color: hsl(var(--secondary));
+            flex-shrink: 0;
+        }
+        .card-body {
+            padding: 1.4rem;
+        }
+
+        /* Neural Hologram Hologram Core Card */
+        .neural-core-card {
+            border: 1px solid rgba(6, 182, 212, 0.22) !important;
+            box-shadow: 0 0 25px rgba(6, 182, 212, 0.08) !important;
+            overflow: hidden;
+            position: relative;
+        }
+        .neural-core-image {
+            width: 100%;
+            height: 160px;
+            object-fit: cover;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+            filter: brightness(1.05) contrast(1.05);
+        }
+        .scanning-laser {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, hsl(var(--secondary)), transparent);
+            box-shadow: 0 0 10px 2px hsl(var(--secondary));
+            animation: scan 4s linear infinite;
+            z-index: 10;
+        }
+        @keyframes scan {
+            0% { top: 16px; opacity: 0; }
+            5% { opacity: 1; }
+            95% { opacity: 1; }
+            100% { top: 176px; opacity: 0; }
+        }
+        .neural-core-glow {
+            position: absolute;
+            top: 16px;
+            left: 16px;
+            right: 16px;
+            height: 160px;
+            border-radius: 12px;
+            background: radial-gradient(circle, rgba(147, 51, 234, 0.12) 0%, transparent 70%);
+            pointer-events: none;
+            animation: corePulse 3s ease-in-out infinite;
+        }
+        @keyframes corePulse {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 0.7; }
+        }
+
+        /* Forms Elements */
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+        }
+        label {
+            display: block;
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: hsl(var(--text-muted));
+            margin-bottom: 0.35rem;
+        }
+        .input-wrapper {
+            position: relative;
+        }
+        .input-wrapper svg {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 15px;
+            height: 15px;
+            color: rgba(255, 255, 255, 0.3);
+        }
+        input, select, textarea {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.25);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 0.7rem 0.7rem 0.7rem 2.3rem;
+            border-radius: 9px;
+            box-sizing: border-box;
+            color: #fff;
+            font-family: var(--font-outfit);
+            font-size: 0.85rem;
+            transition: all 0.25s ease;
+        }
+        textarea {
+            padding-left: 0.8rem;
+            resize: vertical;
+            min-height: 55px;
+        }
+        input:focus, select:focus, textarea:focus {
+            border-color: hsl(var(--secondary));
+            box-shadow: 0 0 10px rgba(6, 182, 212, 0.3);
+            background: rgba(0, 0, 0, 0.4);
+            outline: none;
+        }
+        select {
+            padding-left: 0.8rem;
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='white'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            background-size: 14px;
+        }
+
+        /* Integrations Panel */
+        .integrations-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.75rem;
+        }
+        .integration-tile {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 0.75rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            position: relative;
+            transition: all 0.25s ease;
+        }
+        .integration-tile:hover {
+            background: rgba(255, 255, 255, 0.04);
+            border-color: rgba(6, 182, 212, 0.25);
+        }
+        .tile-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .tile-icon-name {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+        .tile-icon {
+            font-size: 1.1rem;
+        }
+        .sync-indicator {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.15);
+        }
+        .sync-indicator.synced {
+            background-color: hsl(var(--success));
+            box-shadow: 0 0 8px hsl(var(--success));
+        }
+        .tile-time {
+            font-size: 0.68rem;
+            color: hsl(var(--text-muted));
+        }
+        .btn-sync {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 6px;
+            padding: 0.35rem;
+            font-size: 0.72rem;
+            color: #fff;
+            cursor: pointer;
+            font-weight: 500;
+            font-family: var(--font-outfit);
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.3rem;
+        }
+        .btn-sync:hover {
+            background: hsl(var(--primary));
+            border-color: hsl(var(--primary));
+            box-shadow: 0 0 10px var(--primary-glow);
+        }
+        .btn-sync.spinning svg {
+            animation: spin 1s linear infinite;
+        }
+
+        /* Decisions Ledger Matrix */
+        .pros-cons-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.5rem;
+        }
+
+        /* Dashboard Right Side layout */
+        .dashboard-main {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            animation: fadeInRight 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        /* Cognitive Predictions Header Panel */
+        .predictions-card {
+            border-left: 4px solid hsl(var(--primary));
+            background: radial-gradient(circle at 100% 0%, rgba(168, 85, 247, 0.06) 0%, transparent 50%), rgba(12, 18, 33, 0.55);
+        }
+        .predictions-container {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+        .prediction-item {
+            background: rgba(168, 85, 247, 0.04);
+            border: 1px solid rgba(168, 85, 247, 0.12);
+            border-radius: 10px;
+            padding: 0.8rem 1rem;
+            font-size: 0.88rem;
+            line-height: 1.45;
+            display: flex;
+            gap: 0.75rem;
+            align-items: flex-start;
+        }
+        .prediction-icon {
+            font-size: 1.2rem;
+            line-height: 1;
+        }
+        .prediction-text {
+            flex-grow: 1;
+        }
+        .prediction-text strong {
+            color: hsl(var(--primary));
+        }
+
+        /* Productivity Hub Splits */
+        .productivity-splits {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        /* Streaks and Progress visualization */
+        .goals-list, .habits-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+        .goal-row, .habit-row {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 0.75rem 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .goal-details, .habit-details {
+            flex-grow: 1;
+            margin-right: 1.5rem;
+        }
+        .goal-title, .habit-name {
+            font-size: 0.88rem;
+            font-weight: 600;
+            margin: 0 0 0.3rem 0;
+        }
+        .goal-meta, .habit-meta {
+            font-size: 0.75rem;
+            color: hsl(var(--text-muted));
+        }
+        .goal-progress-bar {
+            width: 100px;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 10px;
+            overflow: hidden;
+            margin-top: 0.4rem;
+        }
+        .goal-progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, hsl(var(--primary)), hsl(var(--secondary)));
+            border-radius: 10px;
+        }
+        .btn-complete-habit {
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.25);
+            color: hsl(var(--success));
+            border-radius: 6px;
+            padding: 0.35rem 0.75rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: var(--font-outfit);
+            transition: all 0.2s;
+        }
+        .btn-complete-habit:hover {
+            background: hsl(var(--success));
+            color: #000;
+            box-shadow: 0 0 10px var(--success-glow);
+        }
+
+        /* Vault Search & List styling */
+        .vault-card {
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .vault-controls {
+            display: flex;
+            gap: 0.75rem;
+            margin-bottom: 1.25rem;
+            align-items: center;
+        }
+        .vault-search {
+            flex-grow: 1;
+            padding-left: 2.3rem !important;
+        }
+        .filter-group {
+            display: flex;
+            gap: 0.4rem;
+            flex-wrap: wrap;
+        }
+        .filter-btn {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 20px;
+            padding: 0.35rem 0.85rem;
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: hsl(var(--text-muted));
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .filter-btn:hover {
+            background: rgba(255, 255, 255, 0.07);
+            color: #fff;
+        }
+        .filter-btn.active {
+            background: hsl(var(--secondary));
+            border-color: hsl(var(--secondary));
+            color: #000;
+            font-weight: 600;
+            box-shadow: 0 0 10px var(--secondary-glow);
+        }
+
+        .vault-cards-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1rem;
+            max-height: 480px;
+            overflow-y: auto;
+            padding-right: 0.3rem;
+        }
+        .memory-card {
+            background: rgba(255, 255, 255, 0.015);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 14px;
+            padding: 1.1rem;
+            transition: all 0.25s ease;
+        }
+        .memory-card:hover {
+            background: rgba(255, 255, 255, 0.03);
+            border-color: rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
+        }
+        .card-header-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+        .badge-row {
+            display: flex;
+            gap: 0.4rem;
+            align-items: center;
+        }
+        .card-badge {
+            font-size: 0.68rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 0.15rem 0.5rem;
+            border-radius: 4px;
+        }
+        .badge-note { background: rgba(168, 85, 247, 0.12); color: #c084fc; border: 1px solid rgba(168, 85, 247, 0.25); }
+        .badge-task { background: rgba(245, 158, 11, 0.12); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.25); }
+        .badge-decision { background: rgba(236, 72, 153, 0.12); color: #f472b6; border: 1px solid rgba(236, 72, 153, 0.25); }
+        .badge-conversation { background: rgba(6, 182, 212, 0.12); color: #22d3ee; border: 1px solid rgba(6, 182, 212, 0.25); }
+        
+        .card-category {
+            font-size: 0.72rem;
+            color: hsl(var(--text-muted));
+            background: rgba(255, 255, 255, 0.05);
+            padding: 0.15rem 0.4rem;
+            border-radius: 4px;
+        }
+        .card-time {
+            font-size: 0.72rem;
+            color: hsl(var(--text-muted));
+        }
+        .card-content-text {
+            font-size: 0.88rem;
+            line-height: 1.45;
+            margin: 0 0 0.75rem 0;
+            color: #fff;
+        }
+        .card-footer-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid rgba(255, 255, 255, 0.04);
+            padding-top: 0.6rem;
+            margin-top: 0.4rem;
+        }
+        .card-tags {
+            display: flex;
+            gap: 0.3rem;
+            flex-wrap: wrap;
+        }
+        .tag-pill {
+            font-size: 0.68rem;
+            color: hsl(var(--secondary));
+            background: rgba(6, 182, 212, 0.05);
+            padding: 0.1rem 0.35rem;
+            border-radius: 4px;
+            border: 1px solid rgba(6, 182, 212, 0.15);
+        }
+        .card-links {
+            display: flex;
+            gap: 0.4rem;
+            align-items: center;
+            font-size: 0.72rem;
+            color: hsl(var(--text-muted));
+        }
+        .link-badge {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 4px;
+            padding: 0.1rem 0.35rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .link-badge:hover {
+            border-color: hsl(var(--primary));
+            color: #fff;
+        }
+
+        /* AI Reasoning Arena Console */
+        .console-card {
+            height: 520px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        .console-header {
+            padding: 1rem 1.4rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.15);
+        }
+        .console-title-area {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            font-weight: 600;
+            font-size: 1rem;
+        }
+        .console-title-area svg {
+            width: 16px;
+            height: 16px;
+            color: hsl(var(--primary));
+        }
+        .console-controls {
+            display: flex;
+            gap: 0.4rem;
+        }
+        .btn-circle {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+        .btn-red { background: #ef4444; }
+        .btn-yellow { background: #eab308; }
+        .btn-green { background: #22c55e; }
+
+        .console-scroll-area {
+            flex-grow: 1;
+            padding: 1.4rem;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+            background: rgba(5, 8, 16, 0.4);
+        }
+        .console-empty-state {
+            margin: auto;
+            text-align: center;
+            max-width: 320px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: hsl(var(--text-muted));
+        }
+        .console-empty-state svg {
+            width: 45px;
+            height: 45px;
+            color: rgba(255, 255, 255, 0.08);
+            margin-bottom: 0.8rem;
+        }
+        .console-empty-state h3 {
+            margin: 0 0 0.3rem 0;
+            color: rgba(255, 255, 255, 0.7);
+            font-weight: 500;
+            font-size: 0.95rem;
+        }
+        .console-empty-state p {
+            margin: 0;
+            font-size: 0.8rem;
+            line-height: 1.4;
+        }
+
+        /* Reasoning Step Node Design */
+        .step-node {
+            display: flex;
+            gap: 1rem;
+            animation: slideUpFade 0.4s ease forwards;
+        }
+        .step-badge {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            margin-top: 0.15rem;
+            font-weight: bold;
+            font-size: 0.8rem;
+        }
+        .step-content-card {
+            background: rgba(255, 255, 255, 0.015);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            border-radius: 12px;
+            padding: 0.85rem 1.1rem;
+            flex-grow: 1;
+        }
+        .step-label {
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            margin-bottom: 0.3rem;
+        }
+        .step-text {
+            font-size: 0.88rem;
+            line-height: 1.45;
+            margin: 0;
+        }
+        .step-code-block {
+            margin-top: 0.5rem;
+            background: rgba(0, 0, 0, 0.45);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            padding: 0.6rem 0.8rem;
+            border-radius: 8px;
+            font-family: var(--font-code);
+            font-size: 0.78rem;
+            color: hsl(var(--secondary));
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+
+        /* Node Coloring styles */
+        .step-thought .step-badge {
+            background: rgba(6, 182, 212, 0.08); color: hsl(var(--secondary));
+            border: 1px solid rgba(6, 182, 212, 0.2);
+        }
+        .step-thought .step-content-card { border-left: 3px solid hsl(var(--secondary)); }
+        .step-thought .step-label { color: hsl(var(--secondary)); }
+
+        .step-action .step-badge {
+            background: rgba(245, 158, 11, 0.08); color: hsl(var(--warning));
+            border: 1px solid rgba(245, 158, 11, 0.2);
+        }
+        .step-action .step-content-card { border-left: 3px solid hsl(var(--warning)); }
+        .step-action .step-label { color: hsl(var(--warning)); }
+
+        .step-observation .step-badge {
+            background: rgba(16, 185, 129, 0.08); color: hsl(var(--success));
+            border: 1px solid rgba(16, 185, 129, 0.2);
+        }
+        .step-observation .step-content-card { 
+            border-left: 3px solid hsl(var(--success)); 
+            background: rgba(16, 185, 129, 0.015);
+        }
+        .step-observation .step-label { color: hsl(var(--success)); }
+
+        .step-final .step-badge {
+            background: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--accent)));
+            color: #fff;
+            box-shadow: 0 0 12px var(--primary-glow);
+        }
+        .step-final .step-content-card {
+            border: 1px solid rgba(168, 85, 247, 0.2);
+            border-left: 4px solid hsl(var(--primary));
+            background: radial-gradient(circle at 0% 0%, rgba(168, 85, 247, 0.04) 0%, transparent 40%), rgba(12, 18, 33, 0.45);
+        }
+        .step-final .step-label { color: hsl(var(--accent)); }
+        .step-final .step-text { font-weight: 500; }
+
+        /* Input Prompt Bar styling */
+        .input-bar-card {
+            padding: 0.85rem 1.1rem;
+        }
+        .input-form {
+            display: flex;
+            gap: 0.75rem;
+            align-items: center;
+        }
+        .prompt-input {
+            flex-grow: 1;
+            padding: 0.75rem 1rem !important;
+            border-radius: 10px;
+        }
+        .btn-submit {
+            background: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--secondary)));
+            color: #fff;
+            border: none;
+            padding: 0.75rem 1.4rem;
+            border-radius: 10px;
+            font-weight: 600;
+            font-family: var(--font-outfit);
+            font-size: 0.88rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            box-shadow: 
+                0 4px 0 #7e22ce,
+                0 4px 12px var(--primary-glow);
+            transition: all 0.15s ease-in-out;
+            position: relative;
+            top: 0;
+        }
+        .btn-submit:hover {
+            top: -2px;
+            box-shadow: 
+                0 6px 0 #7e22ce,
+                0 8px 18px var(--primary-glow);
+            filter: brightness(1.06);
+        }
+        .btn-submit:active {
+            top: 4px;
+            box-shadow: 
+                0 0px 0 #7e22ce,
+                0 2px 6px var(--primary-glow);
+        }
+
+        .web-spinner {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            font-size: 0.8rem;
+            color: hsl(var(--warning));
+            padding: 0.4rem 0.8rem;
+            border-radius: 8px;
+            background: rgba(245, 158, 11, 0.04);
+            border: 1px solid rgba(245, 158, 11, 0.1);
+            align-self: flex-start;
+            margin-top: 0.4rem;
+        }
+        .spinner-circle {
+            width: 14px;
+            height: 14px;
+            border: 2px solid rgba(245, 158, 11, 0.2);
+            border-top: 2px solid hsl(var(--warning));
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        /* Success sync notifications */
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: rgba(16, 185, 129, 0.95);
+            color: #000;
+            font-weight: 600;
+            padding: 0.8rem 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 10px 25px rgba(16, 185, 129, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            z-index: 999;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            animation: slideInRight 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        /* Transitions */
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        @keyframes pulse {
+            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4); }
+            70% { transform: scale(1.05); box-shadow: 0 0 0 6px rgba(16, 185, 129, 0); }
+            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+        }
+        @keyframes slideUpFade {
+            from { opacity: 0; transform: translateY(12px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeInLeft {
+            from { opacity: 0; transform: translateX(-20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        @keyframes fadeInRight {
+            from { opacity: 0; transform: translateX(20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        @keyframes slideInRight {
+            from { opacity: 0; transform: translateX(50px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @media (max-width: 1150px) {
+            .workspace-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Aurora Background Mesh Elements -->
+    <div class="aurora-blob aurora-purple"></div>
+    <div class="aurora-blob aurora-cyan"></div>
+    <div class="aurora-blob aurora-pink"></div>
+
+    <div class="workspace-container">
+        
+        <!-- Header -->
+        <header>
+            <div class="logo-area">
+                <div class="logo-icon">
+                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 2C6.48 2 2 6.48 2 12c0 3.06 1.38 5.8 3.56 7.65l1.41-1.41C5.39 16.74 4.5 14.47 4.5 12c0-4.14 3.36-7.5 7.5-7.5s7.5 3.36 7.5 7.5c0 2.47-.89 4.74-2.47 6.24l1.41 1.41C20.62 17.8 22 15.06 22 12c0-5.52-4.48-10-10-10zm0 5c-2.76 0-5 2.24-5 5 0 1.53.69 2.9 1.78 3.82l1.41-1.41C9.46 13.82 9 12.97 9 12c0-1.66 1.34-3 3-3s3 1.34 3 3c0 .97-.46 1.82-1.19 2.41l1.41 1.41C16.31 14.9 17 13.53 17 12c0-2.76-2.24-5-5-5zm0 5c-.55 0-1 .45-1 1s.45 1 1 1 1-.45 1-1-.45-1-1-1z"/>
+                    </svg>
+                </div>
+                <div>
+                    <h1>AETHER COGNITIVE SECOND BRAIN</h1>
+                    <div class="subtitle">Secure Personal Decision Support & Semantic Memory Agent</div>
+                </div>
+            </div>
+            <div class="status-badge">
+                <div class="status-dot"></div>
+                <span>Second Brain Core Synced</span>
+            </div>
+        </header>
+
+        <!-- Main Splits Grid -->
+        <div class="workspace-grid">
+            
+            <!-- Left Sidebar Controls -->
+            <div class="sidebar">
+                
+                <!-- Quantum Core Card (Hologram Visual) -->
+                <div class="glass-card neural-core-card">
+                    <div class="card-body" style="padding: 1rem; position: relative; display: flex; flex-direction: column; align-items: center;">
+                        <div class="scanning-laser"></div>
+                        <img src="ai_core_art.png" alt="Quantum AI Core Hologram" class="neural-core-image">
+                        <div class="neural-core-glow"></div>
+                        
+                        <div style="margin-top: 0.8rem; text-align: center; width: 100%;">
+                            <div style="font-size: 0.85rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1.2px; background: linear-gradient(135deg, #fff, hsl(var(--secondary))); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+                                NEURAL QUANTUM GRAPH CORE
+                            </div>
+                            <div style="font-size: 0.72rem; color: hsl(var(--text-muted)); margin-top: 0.15rem; display: flex; align-items: center; justify-content: center; gap: 0.35rem;">
+                                <span style="display: inline-block; width: 6px; height: 6px; border-radius: 50%; background-color: hsl(var(--secondary)); box-shadow: 0 0 6px hsl(var(--secondary));"></span>
+                                SQLite Persistence & FTS5 Core v3.0
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- API Engine setup Card -->
+                <div class="glass-card">
+                    <div class="card-body">
+                        <div class="panel-title">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                            </svg>
+                            <span>Model Reasoning Configuration</span>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="engine-select">Select Reasoning Engine</label>
+                            <select id="engine-select" onchange="toggleEngineMode()">
+                                <option value="simulation" selected>🧪 Simulation/Demonstration Mode</option>
+                                <option value="gemini">✨ Gemini Developer API (2.5 Flash)</option>
+                                <option value="openai">🤖 OpenAI API (gpt-4o-mini)</option>
+                                <option value="groq">⚡ Groq Developer API (Llama 3.1)</option>
+                            </select>
+                        </div>
+
+                        <div id="key-container" class="form-group" style="display: none;">
+                            <label id="key-label" for="api-key-input">Enter API Secret Key</label>
+                            <div class="input-wrapper">
+                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                                </svg>
+                                <input type="password" id="api-key-input" placeholder="Paste your API key safely...">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- API Integrations Control Room -->
+                <div class="glass-card">
+                    <div class="card-body">
+                        <div class="panel-title">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/>
+                            </svg>
+                            <span>Multi-API External Integrations</span>
+                        </div>
+                        
+                        <div class="integrations-grid">
+                            
+                            <!-- Gmail -->
+                            <div class="integration-tile" id="tile-gmail">
+                                <div class="tile-header">
+                                    <span class="tile-icon-name"><span class="tile-icon">✉️</span> Gmail API</span>
+                                    <span class="sync-indicator" id="ind-gmail"></span>
+                                </div>
+                                <div class="tile-time" id="time-gmail">Disconnected</div>
+                                <button class="btn-sync" onclick="syncService('gmail')">Sync Now</button>
+                            </div>
+                            
+                            <!-- Calendar -->
+                            <div class="integration-tile" id="tile-calendar">
+                                <div class="tile-header">
+                                    <span class="tile-icon-name"><span class="tile-icon">📅</span> Calendar</span>
+                                    <span class="sync-indicator" id="ind-calendar"></span>
+                                </div>
+                                <div class="tile-time" id="time-calendar">Disconnected</div>
+                                <button class="btn-sync" onclick="syncService('calendar')">Sync Now</button>
+                            </div>
+                            
+                            <!-- Notion -->
+                            <div class="integration-tile" id="tile-notion">
+                                <div class="tile-header">
+                                    <span class="tile-icon-name"><span class="tile-icon">📝</span> Notion API</span>
+                                    <span class="sync-indicator" id="ind-notion"></span>
+                                </div>
+                                <div class="tile-time" id="time-notion">Disconnected</div>
+                                <button class="btn-sync" onclick="syncService('notion')">Sync Now</button>
+                            </div>
+                            
+                            <!-- Storage -->
+                            <div class="integration-tile" id="tile-cloud_storage">
+                                <div class="tile-header">
+                                    <span class="tile-icon-name"><span class="tile-icon">💾</span> Cloud Files</span>
+                                    <span class="sync-indicator" id="ind-cloud_storage"></span>
+                                </div>
+                                <div class="tile-time" id="time-cloud_storage">Disconnected</div>
+                                <button class="btn-sync" onclick="syncService('cloud_storage')">Sync Now</button>
+                            </div>
+                            
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Structured Decisions Ledger Form -->
+                <div class="glass-card">
+                    <div class="card-body">
+                        <div class="panel-title">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                            <span>Structured Decisions Journal</span>
+                        </div>
+                        
+                        <form onsubmit="submitDecision(event)">
+                            <div class="form-group">
+                                <label for="dec-problem">Problem Statement / Choice Needed</label>
+                                <input type="text" id="dec-problem" placeholder="e.g. Choose cloud database standard..." required>
+                            </div>
+                            
+                            <div class="form-row">
+                                <div>
+                                    <label for="dec-op-a">Option A</label>
+                                    <input type="text" id="dec-op-a" placeholder="SQLite local">
+                                </div>
+                                <div>
+                                    <label for="dec-op-b">Option B</label>
+                                    <input type="text" id="dec-op-b" placeholder="PostgreSQL server">
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="dec-proscons">Pros & Cons / Variables</label>
+                                <textarea id="dec-proscons" placeholder="A is lighter and zero config. B is highly scalable."></textarea>
+                            </div>
+                            
+                            <div class="form-row">
+                                <div>
+                                    <label for="dec-choice">Finalized Choice</label>
+                                    <input type="text" id="dec-choice" placeholder="SQLite" required>
+                                </div>
+                                <div>
+                                    <label for="dec-reflections">Reflections / Status</label>
+                                    <input type="text" id="dec-reflections" placeholder="Revisit in 6 months">
+                                </div>
+                            </div>
+                            
+                            <button type="submit" class="btn-sync" style="background: rgba(168, 85, 247, 0.15); border-color: rgba(168, 85, 247, 0.3); font-weight: 600;">
+                                Log Decision Node
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Graph Relational Manual Connector -->
+                <div class="glass-card">
+                    <div class="card-body">
+                        <div class="panel-title">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/>
+                            </svg>
+                            <span>Semantic Graph Connector</span>
+                        </div>
+                        
+                        <form onsubmit="connectNodes(event)">
+                            <div class="form-row">
+                                <div>
+                                    <label for="connect-source">Source Memory</label>
+                                    <select id="connect-source" required></select>
+                                </div>
+                                <div>
+                                    <label for="connect-target">Target Memory</label>
+                                    <select id="connect-target" required></select>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="connect-relation">Relation Type</label>
+                                <select id="connect-relation">
+                                    <option value="relates_to">Relates To</option>
+                                    <option value="blocks">Blocks / Pre-requisite For</option>
+                                    <option value="decision_for">Decision Context For</option>
+                                    <option value="created_by">Created By / Owned By</option>
+                                </select>
+                            </div>
+                            
+                            <button type="submit" class="btn-sync" style="background: rgba(6, 182, 212, 0.15); border-color: rgba(6, 182, 212, 0.3); font-weight: 600;">
+                                Link Semantic Nodes
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Right Column Workspace Console -->
+            <div class="dashboard-main">
+                
+                <!-- Predictions & Executive insights Panel -->
+                <div class="glass-card predictions-card">
+                    <div class="card-body">
+                        <div class="panel-title">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
+                            </svg>
+                            <span>Executive Cognitive Predictions & Summary</span>
+                        </div>
+                        <div class="predictions-container" id="predictions-panel">
+                            <!-- JS loaded -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Productivity Command Hub Splits -->
+                <div class="productivity-splits">
+                    
+                    <!-- Goals Checklist -->
+                    <div class="glass-card">
+                        <div class="card-body">
+                            <div class="panel-title">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                </svg>
+                                <span>Active Timeline Goals</span>
+                            </div>
+                            <div class="goals-list" id="goals-container">
+                                <!-- Loaded dynamically -->
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Habits tracker -->
+                    <div class="glass-card">
+                        <div class="card-body">
+                            <div class="panel-title">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                                </svg>
+                                <span>Streaks & Habits Ledger</span>
+                            </div>
+                            <div class="habits-list" id="habits-container">
+                                <!-- Loaded dynamically -->
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+
+                <!-- SQLite vault Vault cards -->
+                <div class="glass-card vault-card">
+                    <div class="card-body">
+                        <div class="panel-title">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"/>
+                            </svg>
+                            <span>Semantic Memory & Knowledge Vault</span>
+                        </div>
+                        
+                        <div class="vault-controls">
+                            <div class="input-wrapper" style="flex-grow: 1;">
+                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                                </svg>
+                                <input type="text" id="vault-search-input" class="vault-search" placeholder="Search semantic keywords, tags, or memories..." oninput="filterVaultData()">
+                            </div>
+                            
+                            <div class="filter-group" id="category-filters">
+                                <button class="filter-btn active" onclick="setCategoryFilter('all', this)">All</button>
+                                <button class="filter-btn" onclick="setCategoryFilter('personal', this)">Personal</button>
+                                <button class="filter-btn" onclick="setCategoryFilter('work', this)">Work</button>
+                                <button class="filter-btn" onclick="setCategoryFilter('study', this)">Study</button>
+                                <button class="filter-btn" onclick="setCategoryFilter('finance', this)">Finance</button>
+                            </div>
+                        </div>
+                        
+                        <div class="vault-cards-grid" id="vault-feed">
+                            <!-- Ingested dynamically -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Chat reasoning loop console -->
+                <div class="glass-card console-card">
+                    <div class="console-header">
+                        <div class="console-title-area">
+                            <svg viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 12H4v-2h8v2zm8-4H4V6h16v6z"/>
+                            </svg>
+                            <span>Autonomous Agent Chat Arena (ReAct Reasoner)</span>
+                        </div>
+                        <div class="console-controls">
+                            <span class="btn-circle btn-red"></span>
+                            <span class="btn-circle btn-yellow"></span>
+                            <span class="btn-circle btn-green"></span>
+                        </div>
+                    </div>
+
+                    <!-- Console feed -->
+                    <div class="console-scroll-area" id="console-feed">
+                        <div class="console-empty-state" id="empty-state">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 6.75L22.5 12l-5.25 5.25m-10.5 0L1.5 12l5.25-5.25m7.5-3l-4.5 16.5" />
+                            </svg>
+                            <h3>Awaiting Cognitive Command</h3>
+                            <p>Write a query in the prompt bar below to run semantic reasoning or perform persistent second brain calculations.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Footer Prompt inputs -->
+                <div class="glass-card input-bar-card">
+                    <form class="input-form" onsubmit="submitQuery(event)">
+                        <input type="text" id="query-input" class="prompt-input" placeholder="Ask Aether to search headphones, sync Gmail, check insights, or evaluate arithmetic...">
+                        <button type="submit" id="btn-submit-text" class="btn-submit">
+                            <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+                            </svg>
+                            <span>Execute ReAct</span>
+                        </button>
+                    </form>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Scripting and dynamic secure DOM bindings -->
+    <script>
+        // Global memory structures
+        let globalDashboardData = {
+            memories: [],
+            connections: [],
+            goals: [],
+            habits: [],
+            integrations: []
+        };
+        
+        let activeCategoryFilter = "all";
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const savedGemini = sessionStorage.getItem("gemini_key");
+            const savedOpenai = sessionStorage.getItem("openai_key");
+            const savedGroq = sessionStorage.getItem("groq_key");
+            const savedEngine = sessionStorage.getItem("selected_engine") || "simulation";
+            
+            document.getElementById("engine-select").value = savedEngine;
+            toggleEngineMode();
+            
+            if (savedEngine === "gemini" && savedGemini) {
+                document.getElementById("api-key-input").value = savedGemini;
+            } else if (savedEngine === "openai" && savedOpenai) {
+                document.getElementById("api-key-input").value = savedOpenai;
+            } else if (savedEngine === "groq" && savedGroq) {
+                document.getElementById("api-key-input").value = savedGroq;
+            }
+            
+            refreshDashboard();
+        });
+
+        // Toggle configuration engine keys
+        function toggleEngineMode() {
+            const engine = document.getElementById("engine-select").value;
+            const keyContainer = document.getElementById("key-container");
+            const keyLabel = document.getElementById("key-label");
+            const keyInput = document.getElementById("api-key-input");
+            
+            sessionStorage.setItem("selected_engine", engine);
+            
+            if (engine === "simulation") {
+                keyContainer.style.display = "none";
+                keyInput.value = "";
+            } else {
+                keyContainer.style.display = "block";
+                if (engine === "gemini") {
+                    keyLabel.textContent = "Gemini Developer Key (API)";
+                    keyInput.placeholder = "Enter AIzaSy... API key safely...";
+                    keyInput.value = sessionStorage.getItem("gemini_key") || "";
+                } else if (engine === "openai") {
+                    keyLabel.textContent = "OpenAI Developer Key (API)";
+                    keyInput.placeholder = "Enter sk-proj-... API key safely...";
+                    keyInput.value = sessionStorage.getItem("openai_key") || "";
+                } else if (engine === "groq") {
+                    keyLabel.textContent = "Groq Developer Key (API)";
+                    keyInput.placeholder = "Enter gsk_... API key safely...";
+                    keyInput.value = sessionStorage.getItem("groq_key") || "";
+                }
+            }
+        }
+
+        document.getElementById("api-key-input").addEventListener("input", (e) => {
+            const engine = document.getElementById("engine-select").value;
+            if (engine === "gemini") {
+                sessionStorage.setItem("gemini_key", e.target.value);
+            } else if (engine === "openai") {
+                sessionStorage.setItem("openai_key", e.target.value);
+            } else if (engine === "groq") {
+                sessionStorage.setItem("groq_key", e.target.value);
+            }
+        });
+
+        // Retrieve statistics from API endpoints and paint UI
+        async function refreshDashboard() {
+            try {
+                const response = await fetch("/api/dashboard", { method: "POST" });
+                const data = await response.json();
+                
+                if (data.error) {
+                    console.error("Dashboard Sync Failed:", data.error);
+                    return;
+                }
+                
+                globalDashboardData = data;
+                
+                renderIntegrationsPanel();
+                renderGoals();
+                renderHabits();
+                renderVaultCards();
+                renderPredictionsSummary();
+                populateConnectionSelects();
+            } catch (e) {
+                console.error("Critical Network Error loading dashboard:", e);
+            }
+        }
+
+        // 1. Integrations Status Render
+        function renderIntegrationsPanel() {
+            globalDashboardData.integrations.forEach(item => {
+                const ind = document.getElementById(`ind-${item.service_name}`);
+                const timeLabel = document.getElementById(`time-${item.service_name}`);
+                
+                if (ind && timeLabel) {
+                    if (item.connected) {
+                        ind.className = "sync-indicator synced";
+                        const d = new Date(item.last_synced_at);
+                        timeLabel.textContent = "Synced: " + d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                    } else {
+                        ind.className = "sync-indicator";
+                        timeLabel.textContent = "Disconnected";
+                    }
+                }
+            });
+        }
+
+        // 2. TIMELINE GOALS
+        function renderGoals() {
+            const container = document.getElementById("goals-container");
+            container.replaceChildren();
+            
+            if (globalDashboardData.goals.length === 0) {
+                const empty = document.createElement("p");
+                empty.className = "goal-meta";
+                empty.textContent = "No active goals logged.";
+                container.appendChild(empty);
+                return;
+            }
+            
+            globalDashboardData.goals.forEach(g => {
+                const row = document.createElement("div");
+                row.className = "goal-row";
+                
+                const details = document.createElement("div");
+                details.className = "goal-details";
+                
+                const title = document.createElement("p");
+                title.className = "goal-title";
+                title.textContent = g.title;
+                
+                const meta = document.createElement("span");
+                meta.className = "goal-meta";
+                meta.textContent = `Status: ${g.status.toUpperCase()} | Target: ${g.deadline}`;
+                
+                const progressContainer = document.createElement("div");
+                progressContainer.className = "goal-progress-bar";
+                
+                const progressFill = document.createElement("div");
+                progressFill.className = "goal-progress-fill";
+                progressFill.style.width = `${g.progress}%`;
+                
+                progressContainer.appendChild(progressFill);
+                details.appendChild(title);
+                details.appendChild(meta);
+                details.appendChild(progressContainer);
+                
+                const control = document.createElement("div");
+                
+                if (g.progress < 100) {
+                    const btn = document.createElement("button");
+                    btn.className = "btn-complete-habit";
+                    btn.textContent = "+10%";
+                    btn.addEventListener("click", () => incrementGoal(g.id, g.progress));
+                    control.appendChild(btn);
+                } else {
+                    const check = document.createElement("span");
+                    check.style.color = "hsl(var(--success))";
+                    check.style.fontWeight = "bold";
+                    check.textContent = "✓ Done";
+                    control.appendChild(check);
+                }
+                
+                row.appendChild(details);
+                row.appendChild(control);
+                container.appendChild(row);
+            });
+        }
+
+        async function incrementGoal(id, currentProgress) {
+            const newProgress = Math.min(currentProgress + 10, 100);
+            try {
+                const response = await fetch("/api/goal/update", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ id: id, progress: newProgress })
+                });
+                const res = await response.json();
+                if (res.success) {
+                    showToast("Goal Progress Updated!");
+                    refreshDashboard();
+                }
+            } catch (e) {
+                console.error(e);
+            }
+        }
+
+        // 3. HABITS RENDER
+        function renderHabits() {
+            const container = document.getElementById("habits-container");
+            container.replaceChildren();
+            
+            if (globalDashboardData.habits.length === 0) {
+                const empty = document.createElement("p");
+                empty.className = "habit-meta";
+                empty.textContent = "No habits established.";
+                container.appendChild(empty);
+                return;
+            }
+            
+            globalDashboardData.habits.forEach(h => {
+                const row = document.createElement("div");
+                row.className = "habit-row";
+                
+                const details = document.createElement("div");
+                details.className = "habit-details";
+                
+                const name = document.createElement("p");
+                name.className = "habit-name";
+                name.textContent = h.name;
+                
+                const meta = document.createElement("span");
+                meta.className = "habit-meta";
+                meta.textContent = `Current Streak: 🔥 ${h.streak} days | Last completed: ${h.last_completed || 'Never'}`;
+                
+                details.appendChild(name);
+                details.appendChild(meta);
+                
+                const control = document.createElement("div");
+                const todayStr = new Date().toISOString().split('T')[0];
+                
+                if (h.last_completed !== todayStr) {
+                    const btn = document.createElement("button");
+                    btn.className = "btn-complete-habit";
+                    btn.textContent = "Check-in";
+                    btn.addEventListener("click", () => completeHabit(h.id));
+                    control.appendChild(btn);
+                } else {
+                    const doneBadge = document.createElement("span");
+                    doneBadge.style.color = "hsl(var(--success))";
+                    doneBadge.style.fontSize = "0.75rem";
+                    doneBadge.style.fontWeight = "bold";
+                    doneBadge.textContent = "✓ Completed";
+                    control.appendChild(doneBadge);
+                }
+                
+                row.appendChild(details);
+                row.appendChild(control);
+                container.appendChild(row);
+            });
+        }
+
+        async function completeHabit(id) {
+            try {
+                const response = await fetch("/api/habit/complete", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ id: id })
+                });
+                const res = await response.json();
+                if (res.success) {
+                    showToast(res.message);
+                    refreshDashboard();
+                }
+            } catch (e) {
+                console.error(e);
+            }
+        }
+
+        // 4. PERSISTENT VAULT CARDS
+        function renderVaultCards() {
+            const feed = document.getElementById("vault-feed");
+            feed.replaceChildren();
+            
+            const searchVal = document.getElementById("vault-search-input").value.trim().toLowerCase();
+            
+            const filtered = globalDashboardData.memories.filter(m => {
+                const matchesCategory = activeCategoryFilter === "all" || m.category === activeCategoryFilter;
+                const matchesSearch = !searchVal || 
+                    m.content.toLowerCase().includes(searchVal) || 
+                    m.tags.toLowerCase().includes(searchVal);
+                return matchesCategory && matchesSearch;
+            });
+            
+            if (filtered.length === 0) {
+                const empty = document.createElement("div");
+                empty.className = "console-empty-state";
+                empty.style.margin = "2rem auto";
+                empty.textContent = "No memory records found matching filters.";
+                feed.appendChild(empty);
+                return;
+            }
+            
+            filtered.forEach(m => {
+                const card = document.createElement("div");
+                card.className = "memory-card";
+                
+                // Header
+                const header = document.createElement("div");
+                header.className = "card-header-row";
+                
+                const badges = document.createElement("div");
+                badges.className = "badge-row";
+                
+                const typeBadge = document.createElement("span");
+                typeBadge.className = `card-badge badge-${m.type}`;
+                typeBadge.textContent = m.type;
+                
+                const categoryBadge = document.createElement("span");
+                categoryBadge.className = "card-category";
+                categoryBadge.textContent = m.category;
+                
+                badges.appendChild(typeBadge);
+                badges.appendChild(categoryBadge);
+                
+                const timeLabel = document.createElement("span");
+                timeLabel.className = "card-time";
+                const d = new Date(m.created_at);
+                timeLabel.textContent = d.toLocaleDateString() + " " + d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                
+                header.appendChild(badges);
+                header.appendChild(timeLabel);
+                
+                // Content
+                const content = document.createElement("p");
+                content.className = "card-content-text";
+                content.textContent = m.content;
+                
+                // Footer
+                const footer = document.createElement("div");
+                footer.className = "card-footer-row";
+                
+                const tags = document.createElement("div");
+                tags.className = "card-tags";
+                if (m.tags) {
+                    m.tags.split(",").forEach(t => {
+                        const pill = document.createElement("span");
+                        pill.className = "tag-pill";
+                        pill.textContent = "#" + t.trim();
+                        tags.appendChild(pill);
+                    });
+                }
+                
+                const links = document.createElement("div");
+                links.className = "card-links";
+                
+                // Fetch connections linked to this memory card
+                const linkedNodes = globalDashboardData.connections.filter(c => c.source_id === m.id || c.target_id === m.id);
+                if (linkedNodes.length > 0) {
+                    links.textContent = "🔗 Connected: ";
+                    linkedNodes.forEach(c => {
+                        const linkedId = c.source_id === m.id ? c.target_id : c.source_id;
+                        const badge = document.createElement("span");
+                        badge.className = "link-badge";
+                        badge.textContent = `ID ${linkedId}`;
+                        badge.title = `Relation: ${c.relation_type}`;
+                        badge.addEventListener("click", () => {
+                            document.getElementById("vault-search-input").value = `ID ${linkedId}`;
+                            filterVaultData();
+                        });
+                        links.appendChild(badge);
+                    });
+                }
+                
+                footer.appendChild(tags);
+                footer.appendChild(links);
+                
+                card.appendChild(header);
+                card.appendChild(content);
+                card.appendChild(footer);
+                feed.appendChild(card);
+            });
+        }
+
+        function filterVaultData() {
+            renderVaultCards();
+        }
+
+        function setCategoryFilter(category, btn) {
+            activeCategoryFilter = category;
+            
+            document.querySelectorAll("#category-filters .filter-btn").forEach(b => b.classList.remove("active"));
+            btn.classList.add("active");
+            
+            renderVaultCards();
+        }
+
+        // 5. PROACTIVE INSIGHTS SUMMARY PANELS
+        function renderPredictionsSummary() {
+            const panel = document.getElementById("predictions-panel");
+            panel.replaceChildren();
+            
+            const totalMems = globalDashboardData.memories.length;
+            const totalLinks = globalDashboardData.connections.length;
+            
+            const statItem = document.createElement("div");
+            statItem.className = "prediction-item";
+            statItem.style.background = "rgba(6, 182, 212, 0.04)";
+            statItem.style.borderColor = "rgba(6, 182, 212, 0.15)";
+            
+            const statIcon = document.createElement("div");
+            statIcon.className = "prediction-icon";
+            statIcon.textContent = "📊";
+            
+            const statText = document.createElement("div");
+            statText.className = "prediction-text";
+            
+            const strong = document.createElement("strong");
+            strong.style.color = "hsl(var(--secondary))";
+            strong.textContent = "Aether Knowledge Graph density: ";
+            
+            const textContentNode = document.createTextNode(`${totalMems} active cognitive nodes securely stored on SQLite database with ${totalLinks} semantic connection paths.`);
+            
+            statText.appendChild(strong);
+            statText.appendChild(textContentNode);
+            statItem.appendChild(statIcon);
+            statItem.appendChild(statText);
+            
+            panel.appendChild(statItem);
+            
+            // Context Alert
+            const brandingMem = globalDashboardData.memories.find(m => m.content.toLowerCase().includes("branding") || m.content.toLowerCase().includes("decision"));
+            
+            if (brandingMem) {
+                const warnItem = document.createElement("div");
+                warnItem.className = "prediction-item";
+                warnItem.style.background = "rgba(236, 72, 153, 0.04)";
+                warnItem.style.borderColor = "rgba(236, 72, 153, 0.15)";
+                
+                const warnIcon = document.createElement("div");
+                warnIcon.className = "prediction-icon";
+                warnIcon.textContent = "⚠️";
+                
+                const warnText = document.createElement("div");
+                warnText.className = "prediction-text";
+                
+                const warnStrong = document.createElement("strong");
+                warnStrong.style.color = "hsl(var(--accent))";
+                warnStrong.textContent = "Proactive Warning Prediction: ";
+                
+                const warnDescNode = document.createTextNode("We detected branding discussions scheduled for Friday. Suggesting formulation of a dedicated goal parameters outline to prevent context leakage.");
+                
+                warnText.appendChild(warnStrong);
+                warnText.appendChild(warnDescNode);
+                warnItem.appendChild(warnIcon);
+                warnItem.appendChild(warnText);
+                
+                panel.appendChild(warnItem);
+            }
+        }
+
+        // Populate manual connection dropdown lists
+        function populateConnectionSelects() {
+            const src = document.getElementById("connect-source");
+            const tgt = document.getElementById("connect-target");
+            
+            src.replaceChildren();
+            tgt.replaceChildren();
+            
+            if (globalDashboardData.memories.length === 0) {
+                const opt = document.createElement("option");
+                opt.textContent = "No nodes available";
+                src.appendChild(opt.cloneNode(true));
+                tgt.appendChild(opt);
+                return;
+            }
+            
+            globalDashboardData.memories.forEach(m => {
+                const opt = document.createElement("option");
+                opt.value = m.id;
+                opt.textContent = `[ID ${m.id}] ${m.content.slice(0, 32)}...`;
+                src.appendChild(opt.cloneNode(true));
+                tgt.appendChild(opt);
+            });
+        }
+
+        // 6. SYNC ACTIONS
+        async function syncService(service) {
+            const tile = document.getElementById(`tile-${service}`);
+            const btn = tile.querySelector(".btn-sync");
+            
+            btn.classList.add("spinning");
+            btn.disabled = true;
+            btn.textContent = "Syncing...";
+            
+            try {
+                const response = await fetch("/api/sync", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ service: service })
+                });
+                const res = await response.json();
+                
+                btn.classList.remove("spinning");
+                btn.disabled = false;
+                btn.textContent = "Sync Now";
+                
+                if (res.success) {
+                    showToast(`${service.toUpperCase()} Ingestion Complete!`);
+                    refreshDashboard();
+                } else {
+                    alert("Sync failed: " + res.error);
+                }
+            } catch (e) {
+                console.error(e);
+                btn.classList.remove("spinning");
+                btn.disabled = false;
+                btn.textContent = "Sync Now";
+            }
+        }
+
+        // 7. DECISIONS LOG SUBMISSION
+        async function submitDecision(event) {
+            event.preventDefault();
+            
+            const problem = document.getElementById("dec-problem").value.trim();
+            const option_a = document.getElementById("dec-op-a").value.trim();
+            const option_b = document.getElementById("dec-op-b").value.trim();
+            const pros_cons = document.getElementById("dec-proscons").value.trim();
+            const choice = document.getElementById("dec-choice").value.trim();
+            const reflections = document.getElementById("dec-reflections").value.trim();
+            
+            try {
+                const response = await fetch("/api/decision", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        problem, option_a, option_b, pros_cons, choice, reflections
+                    })
+                });
+                
+                const res = await response.json();
+                if (res.success) {
+                    showToast("Structured Decision Logged!");
+                    document.getElementById("dec-problem").value = "";
+                    document.getElementById("dec-op-a").value = "";
+                    document.getElementById("dec-op-b").value = "";
+                    document.getElementById("dec-proscons").value = "";
+                    document.getElementById("dec-choice").value = "";
+                    document.getElementById("dec-reflections").value = "";
+                    refreshDashboard();
+                } else {
+                    alert("Error saving decision node: " + res.error);
+                }
+            } catch (e) {
+                console.error(e);
+            }
+        }
+
+        // 8. LINK DYNAMIC MEMORIES
+        async function connectNodes(event) {
+            event.preventDefault();
+            
+            const source_id = document.getElementById("connect-source").value;
+            const target_id = document.getElementById("connect-target").value;
+            const relation = document.getElementById("connect-relation").value;
+            
+            if (source_id === target_id) {
+                alert("Cannot link a memory to itself.");
+                return;
+            }
+            
+            try {
+                const response = await fetch("/api/connect", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ source_id, target_id, relation })
+                });
+                const res = await response.json();
+                
+                if (res.success) {
+                    showToast("Knowledge Graph Connection Added!");
+                    refreshDashboard();
+                } else {
+                    alert("Connection failed: " + res.error);
+                }
+            } catch (e) {
+                console.error(e);
+            }
+        }
+
+        // 9. SUBMIT REACT CHAT ENGINE QUERY
+        async function submitQuery(event) {
+            event.preventDefault();
+            const query = document.getElementById("query-input").value.trim();
+            if (!query) return;
+
+            const feed = document.getElementById("console-feed");
+            const emptyState = document.getElementById("empty-state");
+            
+            if (emptyState) emptyState.style.display = "none";
+            
+            feed.replaceChildren();
+
+            const engine = document.getElementById("engine-select").value;
+            const apiKey = document.getElementById("api-key-input").value;
+            
+            appendNode("thought", "User Query Received", `Initializing ReAct agent pipeline: "${query}"`);
+            const spinner = appendSpinner("Cognitive ReAct loop processing...");
+            
+            try {
+                const response = await fetch("/api/run", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        query: query,
+                        engine: engine,
+                        api_key: apiKey
+                    })
+                });
+                
+                const data = await response.json();
+                removeSpinner(spinner);
+                
+                if (data.error) {
+                    appendNode("observation", "Execution Error", data.error, true);
+                    return;
+                }
+
+                let delay = 0;
+                data.steps.forEach((step, idx) => {
+                    setTimeout(() => {
+                        if (step.thought) {
+                            appendNode("thought", `Step ${idx + 1}: Cognitive Thought`, step.thought);
+                        }
+                        
+                        if (step.action) {
+                            setTimeout(() => {
+                                appendNode("action", `Invoking ReAct Tool`, `Tool Call: ${step.action}\nParameters: ${step.action_input}`, false, true);
+                            }, 400);
+                        }
+                        
+                        if (step.observation) {
+                            setTimeout(() => {
+                                appendNode("observation", `ReAct Tool Observation`, step.observation);
+                            }, 800);
+                        }
+                        
+                        if (step.final_answer) {
+                            setTimeout(() => {
+                                appendNode("final", `Final Consolidated Response`, step.final_answer);
+                                refreshDashboard(); // Proactively sync visual tables when tools execute changes!
+                            }, 1200);
+                        }
+                    }, delay);
+                    
+                    delay += 1800;
+                });
+
+            } catch (err) {
+                removeSpinner(spinner);
+                appendNode("observation", "Connection Fault", "Failed to communicate with the local Python Aether server loop.", true);
+            }
+        }
+
+        // SECURE XSS-COMPLIANT DOM APPENDERS
+        function appendNode(type, label, text, isError = false, isCode = false) {
+            const feed = document.getElementById("console-feed");
+            const node = document.createElement("div");
+            node.className = `step-node step-${type}`;
+            
+            const badge = document.createElement("div");
+            badge.className = "step-badge";
+            
+            let badgeChar = "⚙️";
+            if (type === "thought") badgeChar = "💭";
+            if (type === "action") badgeChar = "🛠️";
+            if (type === "observation") badgeChar = "👁️";
+            if (type === "final") badgeChar = "🏆";
+            if (isError) badgeChar = "⚠️";
+            badge.textContent = badgeChar;
+            
+            const card = document.createElement("div");
+            card.className = "step-content-card";
+            
+            const labelElem = document.createElement("div");
+            labelElem.className = "step-label";
+            labelElem.textContent = label;
+            
+            card.appendChild(labelElem);
+            
+            if (isCode) {
+                const codeBlock = document.createElement("pre");
+                codeBlock.className = "step-code-block";
+                codeBlock.textContent = text;
+                card.appendChild(codeBlock);
+            } else {
+                const textElem = document.createElement("p");
+                textElem.className = "step-text";
+                textElem.textContent = text;
+                card.appendChild(textElem);
+            }
+            
+            node.appendChild(badge);
+            node.appendChild(card);
+            
+            feed.appendChild(node);
+            feed.scrollTop = feed.scrollHeight;
+        }
+
+        function appendSpinner(message) {
+            const feed = document.getElementById("console-feed");
+            const spinner = document.createElement("div");
+            spinner.className = "web-spinner";
+            
+            const loader = document.createElement("div");
+            loader.className = "spinner-circle";
+            
+            const txt = document.createElement("span");
+            txt.textContent = message;
+            
+            spinner.appendChild(loader);
+            spinner.appendChild(txt);
+            feed.appendChild(spinner);
+            feed.scrollTop = feed.scrollHeight;
+            return spinner;
+        }
+
+        function removeSpinner(spinner) {
+            if (spinner && spinner.parentNode) {
+                spinner.parentNode.removeChild(spinner);
+            }
+        }
+
+        // Float notification Toast
+        function showToast(message) {
+            const existing = document.querySelector(".toast");
+            if (existing) existing.remove();
+            
+            const toast = document.createElement("div");
+            toast.className = "toast";
+            toast.textContent = "🔥 " + message;
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.style.animation = "slideUpFade 0.3s cubic-bezier(0.16, 1, 0.3, 1) reverse forwards";
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
